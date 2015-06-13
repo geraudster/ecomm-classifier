@@ -1,0 +1,28 @@
+## Quelques stats
+
+```{r,engine='bash'}
+	wc -l training.csv
+```
+
+## Nettoyage des données
+
+```{r,engine='bash'}
+	csvclean -d ';' -u 3  training.csv
+```
+
+## Encore des stats
+
+```{r,engine='bash'}
+	< training_out.csv  csvstat -d ';' -u 3 --count
+```
+
+Échantillonage: 
+
+```{r,engine='bash'}
+	< training_out.csv ~/data-science-at-the-command-line/tools/sample  -r 0.1 > sample_training_tmp.csv
+	head -1 training_out.csv | csvstack - sample_training_tmp.csv > sample_training.csv
+	wc -l sample_training.csv
+	head sample_training.csv  | csvcut -c 1-4 | csvlook
+```
+
+
