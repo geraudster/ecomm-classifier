@@ -1,28 +1,40 @@
+---
+output:
+  html_document:
+    keep_md: yes
+---
+
 ## Quelques stats
 
-```{r,engine='bash'}
+```{r,engine='bash', cache=TRUE}
 	wc -l training.csv
 ```
 
 ## Nettoyage des données
 
-```{r,engine='bash'}
+```{r,engine='bash', cache=TRUE}
 	csvclean -d ';' -u 3  training.csv
 ```
 
 ## Encore des stats
 
-```{r,engine='bash'}
-	< training_out.csv  csvstat -d ';' -u 3 --count
+```{r,engine='bash', cache=TRUE}
+#	< training_out.csv  csvstat -d ';' -u 3 --count
 ```
 
 Échantillonage: 
 
-```{r,engine='bash'}
+```{r,engine='bash', cache=TRUE}
 	< training_out.csv ~/data-science-at-the-command-line/tools/sample  -r 0.1 > sample_training_tmp.csv
 	head -1 training_out.csv | csvstack - sample_training_tmp.csv > sample_training.csv
 	wc -l sample_training.csv
 	head sample_training.csv  | csvcut -c 1-4 | csvlook
 ```
 
+## Requêtes
+
+```{r test-bash,engine='bash'}
+head -10000 sample_training.csv |  csvsql --query 'select Categorie1, count(Categorie2) from stdin group by Categorie1'
+head -10000 sample_training.csv |  csvsql --query 'select Categorie2, count(Categorie3) from stdin group by Categorie2'
+```
 
